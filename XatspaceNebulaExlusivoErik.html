@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="nebula" data-frame="radar" data-fx="snow">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>xat.me/Erik</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Unbounded:wght@600&display=swap">
+<style>
+:root{--void:#0d0b24;--mist:#1c1750;--a:#8b7bff;--b:#3de0d0;--c:#ff7ab8;--text:#eeeaff;--muted:#a7a2d6;--line:rgba(190,180,255,.18);color-scheme:dark;--top:70px;box-sizing:border-box;padding-top:calc(var(--top) + env(safe-area-inset-top,0px));padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+:root[data-theme=aurora]{--void:#04161a;--mist:#0c3a3a;--a:#34d399;--b:#38bdf8;--c:#bef264}
+:root[data-theme=sunset]{--void:#1b0a14;--mist:#4a1632;--a:#fb923c;--b:#f43f5e;--c:#fde047}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100vh;font:400 14px/1.55 Figtree,system-ui,sans-serif;color:var(--text);background:radial-gradient(900px 520px at 15% -5%,var(--mist),transparent 70%),radial-gradient(700px 420px at 100% 10%,color-mix(in srgb,var(--a) 22%,transparent),transparent 70%),var(--void)}
+.stars{position:fixed;inset:0;pointer-events:none;opacity:.8;background:radial-gradient(1px 1px at 18px 28px,#fff,transparent),radial-gradient(1.5px 1.5px at 130px 90px,#fff,transparent),radial-gradient(1px 1px at 210px 170px,#ffffffb0,transparent),radial-gradient(1px 1px at 60px 200px,#ffffff90,transparent);background-size:250px 250px;animation:tw 7s ease-in-out infinite alternate,drift 90s linear infinite}
+@keyframes tw{to{opacity:.35}}
+@keyframes drift{from{background-position:0 0}to{background-position:250px 250px}}
+@keyframes drift2{from{background-position:0 0}to{background-position:-410px 410px}}
+.stars::after{content:"";position:absolute;inset:0;opacity:.7;background:radial-gradient(1.5px 1.5px at 90px 60px,#fff,transparent),radial-gradient(1px 1px at 250px 140px,#ffffffc0,transparent),radial-gradient(1px 1px at 330px 310px,#fff,transparent),radial-gradient(2px 2px at 160px 360px,#ffffffa0,transparent);background-size:410px 410px;animation:drift2 150s linear infinite}
+[data-fx=rain] .stars,[data-fx=snow] .stars,[data-fx=none] .stars{display:none}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.bar{position:relative;z-index:5;display:flex;justify-content:flex-end;max-width:840px;margin:0 auto;padding:14px 16px 0}
+.edit{display:inline-flex;align-items:center;gap:8px;font:600 .9rem Figtree,sans-serif;color:var(--text);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:99px;padding:8px 16px;cursor:pointer}
+.edit:hover,.edit[aria-expanded=true]{border-color:var(--a)}
+.edit svg{width:16px;height:16px}
+.panel{position:absolute;top:calc(100% + 8px);right:16px;width:min(300px,calc(100% - 32px));padding:18px;max-height:calc(100vh - 160px);overflow-y:auto;border-radius:16px;background:color-mix(in srgb,var(--void) 88%,#fff 12%);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.panel[hidden]{display:none}
+.panel h3{margin:0 0 10px;font:600 .95rem Figtree,sans-serif}
+.panel h3:not(:first-child){margin-top:18px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{flex:1;display:grid;justify-items:center;align-content:center;gap:8px;min-height:68px;padding:10px 4px;font:400 .85rem Figtree,sans-serif;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.opt:hover{border-color:var(--a)}
+.opt[aria-pressed=true]{color:var(--text);border-color:var(--b)}
+.sw{width:26px;height:26px;border-radius:50%}
+.sw.nebula{background:linear-gradient(135deg,#8b7bff,#3de0d0)}
+.sw.aurora{background:linear-gradient(135deg,#34d399,#38bdf8)}
+.sw.sunset{background:linear-gradient(135deg,#fb923c,#f43f5e)}
+.fr{position:relative;width:26px;height:26px;border-radius:50%;border:3px solid var(--a)}
+.fr.ring{border-color:var(--a) var(--b) var(--c) var(--b)}
+.fr.orbit::after{content:"";position:absolute;top:-8px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--c)}
+.fr.pulse{box-shadow:0 0 0 4px color-mix(in srgb,var(--a) 35%,transparent)}
+.fr.neon{border-color:var(--b);box-shadow:0 0 8px var(--b)}
+.fr.radar{border:0;background:conic-gradient(transparent 0 55%,var(--b));-webkit-mask:radial-gradient(farthest-side,transparent 60%,#000 64%);mask:radial-gradient(farthest-side,transparent 60%,#000 64%)}
+.fr.dash{border-style:dashed;border-color:var(--b)}
+.fr.aura{border-color:var(--c);box-shadow:0 0 10px 2px var(--a)}
+.ic{height:26px;font-size:20px;line-height:26px}
+.wrap{position:relative;max-width:840px;margin:0 auto;padding:12px 16px 48px;display:grid;grid-template-columns:230px 1fr;gap:14px;align-items:start}
+.col{display:grid;gap:14px;min-width:0}
+.box{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:14px;padding:14px;backdrop-filter:blur(8px)}
+.box h2{margin:0 0 10px;font:600 .95rem/1.2 Figtree,sans-serif}
+.hero{text-align:center;border-radius:22px;padding:24px 14px 18px;border-color:color-mix(in srgb,var(--a) 50%,transparent)}
+.frame{position:relative;zoom:.5;width:156px;height:156px;margin:0 auto 28px;border-radius:50%}
+.frame::before{content:"";position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--a),var(--b),var(--c),var(--a));animation:spin 5s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px))}
+.frame::after{content:"";display:none;position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle at 50% 6px,var(--c) 0 5px,transparent 6px);animation:spin 7s linear infinite reverse}
+.frame img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+[data-frame=orbit] .frame::after{display:block}
+[data-frame=pulse] .frame::before{inset:0;background:none;-webkit-mask:none;mask:none;animation:pulse 2.4s ease-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes neon{from{opacity:.65;filter:hue-rotate(0deg)}to{opacity:1;filter:hue-rotate(70deg)}}
+@keyframes aura{0%{box-shadow:0 0 22px 4px var(--a),0 0 50px 10px color-mix(in srgb,var(--b) 40%,transparent)}50%{box-shadow:0 0 30px 8px var(--c),0 0 60px 14px color-mix(in srgb,var(--a) 40%,transparent)}100%{box-shadow:0 0 22px 4px var(--b),0 0 50px 10px color-mix(in srgb,var(--c) 40%,transparent)}}
+[data-frame=neon] .frame::before{inset:-3px;background:none;-webkit-mask:none;mask:none;border:3px solid var(--b);box-shadow:0 0 10px var(--b),0 0 26px var(--a),inset 0 0 10px var(--a);animation:neon 2.6s ease-in-out infinite alternate}
+[data-frame=radar] .frame::before{background:conic-gradient(transparent 0 60%,var(--b));animation:spin 2.4s linear infinite}
+[data-frame=radar] .frame::after{display:block;inset:-6px;background:none;border:2px solid color-mix(in srgb,var(--a) 35%,transparent);animation:none}
+[data-frame=dash] .frame::before{inset:-8px;background:none;-webkit-mask:none;mask:none;border:3px dashed var(--b);animation:spin 14s linear infinite}
+[data-frame=dash] .frame::after{display:block;inset:-18px;background:none;border:2px dotted var(--c);animation:spin 20s linear infinite reverse}
+[data-frame=aura] .frame::before{inset:0;background:none;-webkit-mask:none;mask:none;animation:aura 5s ease-in-out infinite alternate}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--a)}70%,100%{box-shadow:0 0 0 24px transparent}}
+h1{margin:0;font:600 1.1rem/1.2 Unbounded,Figtree,sans-serif;overflow-wrap:anywhere}
+.w{display:inline-block}
+.w span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0);color:var(--text);text-shadow:none}35%{color:var(--b);text-shadow:0 0 10px var(--b)}50%{transform:translateY(-7px);color:var(--c);text-shadow:0 0 16px var(--c)}65%{color:var(--a);text-shadow:0 0 10px var(--a)}}
+.handle{margin:6px 0 14px;color:var(--muted)}
+.status{display:inline-block;margin:0;padding:4px 14px;border-radius:99px;background:rgba(255,255,255,.07);font-size:.9rem}
+.status::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:var(--b)}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px}
+dt{color:var(--muted)}
+dd{margin:0;text-align:right}
+.links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.links a{color:var(--text);text-decoration:none;padding:4px 11px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.05)}
+.links a:hover{border-color:var(--b)}
+#about{margin:0;max-width:62ch}
+.video{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+.video iframe{width:100%;height:100%;border:0}
+.cap{margin:8px 0 0;color:var(--muted);font-size:.8rem}
+.song{justify-self:start;width:min(100%,240px)}
+.vids{display:flex;flex-wrap:wrap;gap:14px}
+.friends{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 6px}
+.friends li{position:relative;text-align:center;min-width:0}
+.fa{position:relative;zoom:.75;width:60px;height:60px;margin:0 auto 10px}
+.fa::before{content:"";position:absolute;inset:-10px;border-radius:50%;background:radial-gradient(circle at 50% 4px,var(--b) 0 3px,transparent 4px),radial-gradient(circle at 50% calc(100% - 4px),var(--c) 0 3px,transparent 4px);filter:drop-shadow(0 0 4px var(--b));animation:spin 5s linear infinite;animation-delay:var(--o,0s)}
+.fa::after{content:"";position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(circle at 50% 3px,var(--a) 0 2px,transparent 3px);filter:drop-shadow(0 0 3px var(--a));animation:spin 3s linear infinite reverse;animation-delay:var(--o,0s)}
+.fa:hover::before{animation-duration:1.8s}
+.friends img{display:block;width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--line)}
+.friends li.on img{border-color:var(--b)}
+@keyframes wave{to{background-position:200% 0}}
+.friends span{display:block;font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--a));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:wave 4s linear infinite}
+@supports selector(::-webkit-scrollbar){
+*::-webkit-scrollbar{width:12px;height:12px}
+*::-webkit-scrollbar-track{background:rgba(255,255,255,.03);box-shadow:inset 1px 0 var(--line)}
+*::-webkit-scrollbar-thumb{border:3px solid transparent;border-radius:99px;background:linear-gradient(180deg,var(--a),var(--b),var(--c)) padding-box;box-shadow:inset 0 0 6px rgba(255,255,255,.35)}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--c),var(--b),var(--a)) padding-box;box-shadow:inset 0 0 8px rgba(255,255,255,.6)}
+*::-webkit-scrollbar-corner{background:transparent}
+}
+@supports not selector(::-webkit-scrollbar){*{scrollbar-width:thin;scrollbar-color:var(--a) transparent}}
+a:focus-visible,button:focus-visible{outline:2px solid var(--b);outline-offset:3px}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}}
+@media(max-width:480px){.friends{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="bar">
+  <button class="edit" id="edit" aria-expanded="false" aria-controls="panel">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  </button>
+  <div class="panel" id="panel" hidden>
+    <h3>Color</h3>
+    <div class="opts">
+      <button class="opt" data-t="nebula"><span class="sw nebula"></span>Nebula</button>
+      <button class="opt" data-t="aurora"><span class="sw aurora"></span>Aurora</button>
+      <button class="opt" data-t="sunset"><span class="sw sunset"></span>Sunset</button>
+    </div>
+    <h3>Marco de la foto</h3>
+    <div class="opts">
+      <button class="opt" data-f="ring"><span class="fr ring"></span>Anillo</button>
+      <button class="opt" data-f="orbit"><span class="fr orbit"></span>Órbita</button>
+      <button class="opt" data-f="pulse"><span class="fr pulse"></span>Pulso</button>
+      <button class="opt" data-f="neon"><span class="fr neon"></span>Neón</button>
+      <button class="opt" data-f="radar"><span class="fr radar"></span>Radar</button>
+      <button class="opt" data-f="dash"><span class="fr dash"></span>Discontinuo</button>
+      <button class="opt" data-f="aura"><span class="fr aura"></span>Aura</button>
+    </div>
+    <h3>Efecto de fondo</h3>
+    <div class="opts">
+      <button class="opt" data-x="stars"><span class="ic">✨</span>Estrellas</button>
+      <button class="opt" data-x="rain"><span class="ic">🌧️</span>Lluvia</button>
+      <button class="opt" data-x="snow"><span class="ic">❄️</span>Nieve</button>
+      <button class="opt" data-x="meteor"><span class="ic">☄️</span>Meteoritos</button>
+      <button class="opt" data-x="none"><span class="ic">○</span>Ninguno</button>
+    </div>
+  </div>
+</div>
+<main class="wrap">
+  <div class="col">
+    <section class="box hero">
+      <div class="frame"><img id="avatar" alt=""></div>
+      <h1 id="name"></h1>
+      <p class="handle" id="handle"></p>
+      <p class="status" id="status"></p>
+    </section>
+    <section class="box"><h2>Datos</h2><dl id="info"></dl></section>
+    <div class="links" id="links"></div>
+  </div>
+  <div class="col">
+    <section class="box"><h2>Sobre mí</h2><p id="about"></p></section>
+    <div class="vids">
+    <section class="box song">
+      <h2>Mi canción</h2>
+      <div class="video"><iframe id="yt" title="Vídeo de YouTube" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+      <p class="cap" id="cap"></p>
+    </section>
+    <section class="box song">
+      <h2>Mi vídeo</h2>
+      <div class="video"><iframe id="yt2" title="Segundo vídeo de YouTube" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+      <p class="cap" id="cap2"></p>
+    </section>
+  </div>
+    <section class="box"><h2>Amistades</h2><ul class="friends" id="friends"></ul></section>
+  </div>
+</main>
+<script>
+// ===== Edita solo este bloque para personalizar la plantilla =====
+const P = {
+  name: "it's Erik",
+  handle: "xat.me/Erik",
+  status: "Unknown",
+  avatar: "", // URL de la foto de perfil; vacío = avatar automático con la inicial
+  info: [["Nombre","Erik"],["Edad","111"],["País","🇦🇲 Armenia"],["Cumpleaños","XX de Julio"],["Aficiones","C0ding, Design & Football"]],
+  about: "Hello, this is an example text. © Develop by Erik",
+  video: { id: "jfKfPfyJRdk", title: "La canción que más escucho" }, // ID del vídeo de YouTube
+  video2: { id: "5qap5aO4i9A", title: "Otro vídeo que me encanta" }, // segundo vídeo, mismo formato
+  links: [["Chat de xat","#"],["Instagram","#"],["YouTube","#"],["Spotify","#"]],
+  friends: [["Nova",1],["Orión",1],["Vega",0],["Sirio",1],["Lyra",0],["Atlas",1]] // [nombre, en línea (1/0), URL de foto opcional]
+};
+// ==================================================================
+const $ = id => document.getElementById(id);
+const av = n => {
+  const h = [...n].reduce((s, c) => s + c.charCodeAt(0) * 31, 0) % 360;
+  const ch = n.trim().charAt(0).toUpperCase().replace(/[<>&]/g, "");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h} 85% 62%)"/><stop offset="1" stop-color="hsl(${(h + 70) % 360} 80% 42%)"/></linearGradient></defs><rect width="64" height="64" fill="url(#g)"/><text x="32" y="42" font-size="28" font-weight="700" text-anchor="middle" fill="#fff" font-family="sans-serif">${ch}</text></svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+};
+document.title = "Xatspace de " + P.name;
+$("name").setAttribute("aria-label", P.name);
+let n = [...P.name.replace(/ /g, "")].length;
+P.name.split(" ").forEach((w, wi) => {
+  if (wi) $("name").append(" ");
+  const ws = document.createElement("span"); ws.className = "w"; ws.setAttribute("aria-hidden", "true");
+  [...w].forEach(c => { const l = document.createElement("span"); l.textContent = c; l.style.animationDelay = (-(--n) * 0.14) + "s"; ws.append(l); });
+  $("name").append(ws);
+});
+$("handle").textContent = P.handle;
+$("status").textContent = P.status;
+$("avatar").src = P.avatar || av(P.name);
+$("avatar").alt = "Foto de " + P.name;
+P.info.forEach(([k, v]) => {
+  const dt = document.createElement("dt"), dd = document.createElement("dd");
+  dt.textContent = k; dd.textContent = v; $("info").append(dt, dd);
+});
+P.links.forEach(([t, u]) => {
+  const a = document.createElement("a");
+  a.href = u; a.textContent = t; a.target = "_blank"; a.rel = "noopener"; $("links").append(a);
+});
+$("about").textContent = P.about;
+$("yt").src = "https://www.youtube-nocookie.com/embed/" + P.video.id;
+$("cap").textContent = P.video.title;
+$("yt2").src = "https://www.youtube-nocookie.com/embed/" + P.video2.id;
+$("cap2").textContent = P.video2.title;
+P.friends.forEach(([n, on, img], idx) => {
+  const li = document.createElement("li"), i = document.createElement("img"), s = document.createElement("span");
+  i.src = img || av(n); i.alt = ""; s.textContent = n; s.style.animationDelay = (-idx * 0.8) + "s";
+  if (on) li.className = "on";
+  const f = document.createElement("div"); f.className = "fa"; f.style.setProperty("--o", (-idx * 0.9) + "s"); f.append(i); li.append(f, s); $("friends").append(li);
+});
+const R = document.documentElement;
+const mark = () => document.querySelectorAll(".opt").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === R.dataset.theme || b.dataset.f === R.dataset.frame || b.dataset.x === R.dataset.fx)));
+document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { R.dataset.theme = b.dataset.t; mark(); setFx(R.dataset.fx); });
+document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { R.dataset.frame = b.dataset.f; mark(); });
+document.querySelectorAll("[data-x]").forEach(b => b.onclick = () => { R.dataset.fx = b.dataset.x; mark(); setFx(b.dataset.x); });
+$("edit").onclick = () => { const open = $("panel").hidden; $("panel").hidden = !open; $("edit").setAttribute("aria-expanded", String(open)); };
+// Efectos de fondo (lluvia, nieve, meteoritos) dibujados en un canvas
+const cv = $("fx"), cx = cv.getContext("2d"), calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let W, H, ps = [], raf, mode, k;
+const fit = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+addEventListener("resize", fit); fit();
+const rnd = (a, b) => a + Math.random() * (b - a);
+const mk = (m, init) => m == "rain" ? { x: rnd(0, W + 200), y: init ? rnd(0, H) : rnd(-60, 0), l: rnd(12, 26), v: rnd(14, 24) }
+  : m == "snow" ? { x: rnd(0, W), y: init ? rnd(0, H) : -5, r: rnd(1.2, 3.6), v: rnd(.6, 1.8), p: rnd(0, 6.3) }
+  : { x: rnd(W * .3, W * 1.1), y: rnd(-60, H * .3), v: rnd(9, 15), l: rnd(90, 200) };
+function loop() {
+  cx.clearRect(0, 0, W, H);
+  if (mode == "meteor" && Math.random() < .025) ps.push(mk(mode));
+  cx.lineWidth = mode == "meteor" ? 2 : 1;
+  for (const p of ps) {
+    if (mode == "rain") {
+      cx.globalAlpha = .45; cx.strokeStyle = k; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.l * .25, p.y + p.l); cx.stroke();
+      p.y += p.v; p.x -= p.v * .25; if (p.y > H) Object.assign(p, mk(mode));
+    } else if (mode == "snow") {
+      cx.globalAlpha = .8; cx.fillStyle = "#fff"; cx.beginPath(); cx.arc(p.x + Math.sin(p.p + p.y / 60) * 12, p.y, p.r, 0, 6.283); cx.fill();
+      p.y += p.v; if (p.y > H + 5) Object.assign(p, mk(mode));
+    } else {
+      const g = cx.createLinearGradient(p.x, p.y, p.x + p.l * .7, p.y - p.l * .7);
+      g.addColorStop(0, "#fff"); g.addColorStop(.25, k); g.addColorStop(1, "transparent");
+      cx.globalAlpha = 1; cx.strokeStyle = g; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x + p.l * .7, p.y - p.l * .7); cx.stroke();
+      p.x -= p.v * .7; p.y += p.v * .7;
+    }
+  }
+  if (mode == "meteor") ps = ps.filter(p => p.y < H + 50 && p.x > -250);
+  raf = requestAnimationFrame(loop);
+}
+function setFx(m) {
+  cancelAnimationFrame(raf); cx.clearRect(0, 0, W, H);
+  mode = m; k = getComputedStyle(R).getPropertyValue("--b").trim();
+  if (calm || !["rain", "snow", "meteor"].includes(m)) return;
+  ps = [];
+  if (m != "meteor") for (let i = 0; i < (m == "rain" ? 120 : 90); i++) ps.push(mk(m, true));
+  loop();
+}
+mark(); setFx(R.dataset.fx);
+</script>
+</body>
+</html>
